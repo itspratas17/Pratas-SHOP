@@ -34,13 +34,14 @@
         .admin-input { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; }
         .btn-admin-save { background: #ff0844; color: white; padding: 14px; border: none; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; margin-top: 10px; }
         
-        .gestao-lista { margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; }
+        .gestao-lista { margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; max-height: 300px; overflow-y: auto; }
         .gestao-item { display: flex; justify-content: space-between; align-items: center; background: #0a0a0a; padding: 10px; border-radius: 5px; margin-bottom: 8px; border: 1px solid #222; }
         .gestao-btns button { padding: 5px 10px; cursor: pointer; border-radius: 4px; border: none; font-size: 12px; font-weight: bold; margin-left: 5px; }
+        .btn-edit { background: #ffb347; color: #000; }
         .btn-del { background: #ff0844; color: #fff; }
 
-        .upload-container { border: 1px dashed #444; border-radius: 12px; padding: 30px 20px; text-align: center; background: #151515; margin: 15px 0; }
-        .btn-enviar-img { background: linear-gradient(90deg, #ffb347 0%, #ff4b2b 100%); color: white; padding: 12px 30px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 10px; font-size: 16px; }
+        .upload-container { border: 1px dashed #444; border-radius: 12px; padding: 20px; text-align: center; background: #151515; margin: 15px 0; }
+        .btn-enviar-img { background: linear-gradient(90deg, #ffb347 0%, #ff4b2b 100%); color: white; padding: 10px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 10px; font-size: 14px; }
         
         .sidebar-cart { position: fixed; right: -100%; top: 0; width: 320px; height: 100vh; background: #1a1a1a; border-left: 2px solid #ff0844; z-index: 2000; transition: 0.4s; padding: 20px; display: flex; flex-direction: column; }
         .sidebar-cart.active { right: 0; }
@@ -92,22 +93,31 @@
                 <h2 id="adminTitle" style="color:#ff0844;">New Product</h2>
                 <button onclick="fecharAdmin()" style="background:transparent; color:#ff0844; border:none; font-size:24px; cursor:pointer;">&times;</button>
             </div>
+            
             <input type="hidden" id="editId">
+            
             <input type="text" id="admNome" class="admin-input" placeholder="Product Name">
             <input type="text" id="admDesc" class="admin-input" placeholder="Description (Optional)">
-            <input type="number" id="admPreco" class="admin-input" placeholder="Price (€)">
+            <input type="number" id="admPreco" class="admin-input" placeholder="Price (€)" step="0.01">
             <select id="admCat" class="admin-input">
                 <option value="streaming">Streaming</option>
                 <option value="games">Games</option>
                 <option value="social">Social</option>
             </select>
+            
             <div class="upload-container">
                 <input type="file" id="admImgFile" hidden accept="image/*" onchange="handleFile(this.files[0])">
                 <button class="btn-enviar-img" onclick="document.getElementById('admImgFile').click()">Upload Image</button>
-                <input type="text" id="admImgURL" class="admin-input" placeholder="Or paste image URL here" oninput="handleURL(this.value)">
-                <div id="mini-preview" style="display:none; margin-top:10px;"><img id="imgPre" style="width:60px; height:60px; object-fit:cover; border-radius:5px;"></div>
+                <input type="text" id="admImgURL" class="admin-input" placeholder="Or paste image URL" oninput="handleURL(this.value)">
+                <div id="mini-preview" style="display:none; margin-top:10px;">
+                    <p style="font-size: 10px; color: #888; margin-bottom: 5px;">Preview:</p>
+                    <img id="imgPre" style="width:60px; height:60px; object-fit:cover; border-radius:5px; border: 1px solid #ff0844;">
+                </div>
             </div>
-            <button class="btn-admin-save" id="btnSalvar" onclick="salvarNovoProduto()">ADD PRODUCT</button>
+            
+            <button class="btn-admin-save" id="btnSalvar" onclick="salvarProduto()">ADD PRODUCT</button>
+            <button id="btnCancelEdit" onclick="resetForm()" style="display:none; background:transparent; color:#888; border:none; width:100%; margin-top:10px; cursor:pointer;">Cancel Editing</button>
+
             <div class="gestao-lista" id="listaGestao"></div>
         </div>
     </div>
@@ -115,16 +125,11 @@
     <div id="sidebarCart" class="sidebar-cart">
         <h2 style="color: #ff0844; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">Your Cart</h2>
         <div id="cart-items" style="flex-grow:1; overflow-y: auto;"></div>
-        
         <div style="border-top:1px solid #333; padding-top:15px; margin-top: 10px;">
             <p style="font-size: 18px; margin-bottom: 15px;">Total: <span id="cart-total" style="font-weight: bold; color: #ff0844;">€0.00</span></p>
-            
             <label style="font-size: 11px; color: #888; display: block; margin-bottom: 5px;">DISCORD USERNAME:</label>
-            <input type="text" id="discordUser" placeholder="Ex: @user#0000" 
-                   style="width: 100%; padding: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 5px; margin-bottom: 15px;">
-
+            <input type="text" id="discordUser" placeholder="Ex: user#0000" style="width: 100%; padding: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 5px; margin-bottom: 15px;">
             <div id="paypal-button-container"></div>
-            
             <button onclick="toggleCart()" style="width:100%; background:transparent; color:#666; border:none; padding:10px; margin-top:5px; cursor:pointer; font-size: 12px;">Close Cart</button>
         </div>
     </div>
@@ -170,6 +175,7 @@
         }
 
         function handleFile(file) {
+            if(!file) return;
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = (e) => {
@@ -179,25 +185,60 @@
             };
         }
 
-        function salvarNovoProduto() {
+        // FUNÇÃO PARA CARREGAR DADOS NO FORMULÁRIO PARA EDITAR
+        function editarProduto(id) {
+            const p = produtos.find(item => item.id == id);
+            if(!p) return;
+
+            document.getElementById('adminTitle').innerText = "Editing: " + p.nome;
+            document.getElementById('editId').value = p.id;
+            document.getElementById('admNome').value = p.nome;
+            document.getElementById('admPreco').value = p.preco;
+            document.getElementById('admDesc').value = p.desc;
+            document.getElementById('admCat').value = p.categoria;
+            
+            imagemFinal = p.img;
+            document.getElementById('mini-preview').style.display = 'block';
+            document.getElementById('imgPre').src = p.img;
+            
+            document.getElementById('btnSalvar').innerText = "SAVE CHANGES";
+            document.getElementById('btnCancelEdit').style.display = "block";
+            
+            // Scroll para o topo do painel
+            document.getElementById('adminPanel').scrollTop = 0;
+        }
+
+        function salvarProduto() {
             const id = document.getElementById('editId').value;
             const nome = document.getElementById('admNome').value;
-            const preco = document.getElementById('admPreco').value;
+            const preco = parseFloat(document.getElementById('admPreco').value);
             const desc = document.getElementById('admDesc').value || "";
             const cat = document.getElementById('admCat').value;
-            if(!nome || !preco || !imagemFinal) return alert("Please fill all fields!");
+
+            if(!nome || isNaN(preco) || !imagemFinal) return alert("Please fill Name, Price and Image!");
+
             if(id) {
+                // MODO EDIÇÃO
                 const index = produtos.findIndex(p => p.id == id);
-                produtos[index] = { id: parseInt(id), nome, preco: parseFloat(preco), desc, img: imagemFinal, categoria: cat };
+                produtos[index] = { id: parseInt(id), nome, preco, desc, img: imagemFinal, categoria: cat };
+                alert("Product updated!");
             } else {
-                produtos.push({ id: Date.now(), nome, preco: parseFloat(preco), desc, img: imagemFinal, categoria: cat });
+                // MODO NOVO
+                produtos.push({ id: Date.now(), nome, preco, desc, img: imagemFinal, categoria: cat });
+                alert("Product added!");
             }
+
             localStorage.setItem('pratas_stock', JSON.stringify(produtos));
-            location.reload();
+            resetForm();
+            atualizarListaGestao();
+            // Se estivermos numa categoria, atualiza a vista
+            if(document.getElementById('areaItens').style.display === 'block') {
+                abrirCategoria(cat);
+            }
         }
 
         function apagarProduto(id) {
-            if(confirm("Delete this product?")) {
+            if(confirm("Delete this product permanently?")) {
                 produtos = produtos.filter(p => p.id != id);
                 localStorage.setItem('pratas_stock', JSON.stringify(produtos));
                 atualizarListaGestao();
@@ -208,9 +249,13 @@
             const container = document.getElementById('listaGestao');
             container.innerHTML = produtos.map(p => `
                 <div class="gestao-item">
-                    <span>${p.nome}</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="${p.img}" style="width:30px; height:30px; object-fit:cover; border-radius:4px;">
+                        <span>${p.nome} (€${p.preco.toFixed(2)})</span>
+                    </div>
                     <div class="gestao-btns">
-                        <button class="btn-del" onclick="apagarProduto(${p.id})">Delete</button>
+                        <button class="btn-edit" onclick="editarProduto(${p.id})">Edit</button>
+                        <button class="btn-del" onclick="apagarProduto(${p.id})">X</button>
                     </div>
                 </div>
             `).join('');
@@ -220,11 +265,17 @@
             document.getElementById('editId').value = "";
             document.getElementById('admNome').value = "";
             document.getElementById('admPreco').value = "";
+            document.getElementById('admDesc').value = "";
+            document.getElementById('admImgURL').value = "";
+            document.getElementById('admImgFile').value = "";
             document.getElementById('mini-preview').style.display = 'none';
+            document.getElementById('adminTitle').innerText = "New Product";
+            document.getElementById('btnSalvar').innerText = "ADD PRODUCT";
+            document.getElementById('btnCancelEdit').style.display = "none";
             imagemFinal = null;
         }
 
-        // --- NAVIGATION ---
+        // --- NAVIGATION & STORE LOGIC ---
         function abrirCategoria(cat) {
             document.getElementById('menuPrincipal').style.display = 'none';
             document.getElementById('areaItens').style.display = 'block';
@@ -234,7 +285,7 @@
                 <div class="item-clicavel" onclick="abrirDetalhe(${p.id})">
                     <img src="${p.img}" class="item-img">
                     <div class="item-info"><h3>${p.nome}</h3><span>€${p.preco.toFixed(2)}</span></div>
-                </div>`).join('') || "<p>Coming soon.</p>";
+                </div>`).join('') || "<p style='grid-column: 1/-1;'>No products found in this category.</p>";
         }
 
         function voltarAoMenu() { document.getElementById('menuPrincipal').style.display = 'block'; document.getElementById('areaItens').style.display = 'none'; }
@@ -243,20 +294,17 @@
             const p = produtos.find(item => item.id == id);
             produtoAtual = p;
             document.getElementById('modalNome').innerText = p.nome;
-            document.getElementById('modalDesc').innerText = p.desc;
+            document.getElementById('modalDesc').innerText = p.desc || "No description available.";
             document.getElementById('modalPreco').innerText = `€${p.preco.toFixed(2)}`;
-            document.getElementById('modalIcone').innerHTML = `<img src="${p.img}" style="width:100%; height:180px; object-fit:cover; border-radius:10px;">`;
+            document.getElementById('modalIcone').innerHTML = `<img src="${p.img}" style="width:100%; height:180px; object-fit:cover; border-radius:10px; border: 1px solid #333;">`;
             document.getElementById('modalDetalhe').style.display = 'flex';
         }
 
         function fecharModal() { document.getElementById('modalDetalhe').style.display = 'none'; }
 
-        // --- CART & PAYPAL ---
         function toggleCart() { 
             document.getElementById('sidebarCart').classList.toggle('active'); 
-            if(document.getElementById('sidebarCart').classList.contains('active')) {
-                renderPaypalButtons();
-            }
+            if(document.getElementById('sidebarCart').classList.contains('active')) renderPaypalButtons();
         }
 
         function adicionarAoCarrinho() {
@@ -269,14 +317,22 @@
         function atualizarCarrinhoUI() {
             document.getElementById('cart-count').innerText = carrinho.length;
             let total = 0;
-            document.getElementById('cart-items').innerHTML = carrinho.map(i => {
+            document.getElementById('cart-items').innerHTML = carrinho.map((i, index) => {
                 total += i.preco;
-                return `<div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size: 14px;">
-                            <span>${i.nome}</span>
-                            <span>€${i.preco.toFixed(2)}</span>
+                return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size: 14px; background:#000; padding:8px; border-radius:5px;">
+                            <div>
+                                <p style="font-weight:bold;">${i.nome}</p>
+                                <p style="color:#ff0844;">€${i.preco.toFixed(2)}</p>
+                            </div>
+                            <button onclick="removerDoCarrinho(${index})" style="background:none; border:none; color:#555; cursor:pointer;">&times;</button>
                         </div>`;
             }).join('');
             document.getElementById('cart-total').innerText = `€${total.toFixed(2)}`;
+        }
+
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinhoUI();
         }
 
         function renderPaypalButtons() {
@@ -286,29 +342,17 @@
             paypal.Buttons({
                 createOrder: function(data, actions) {
                     const discord = document.getElementById('discordUser').value;
-                    if (!discord || discord.trim() === "") {
-                        alert("Please enter your Discord username!");
-                        return actions.reject();
-                    }
-
-                    let valorTotal = document.getElementById('cart-total').innerText.replace('€', '').trim();
+                    if (!discord) { alert("Please enter your Discord!"); return actions.reject(); }
+                    let val = document.getElementById('cart-total').innerText.replace('€', '');
                     return actions.order.create({
-                        purchase_units: [{
-                            description: "Pratas Shop Purchase - Discord: " + discord,
-                            amount: { value: valorTotal }
-                        }]
+                        purchase_units: [{ description: "Pratas Shop - Discord: " + discord, amount: { value: val } }]
                     });
                 },
                 onApprove: function(data, actions) {
                     return actions.order.capture().then(function(details) {
-                        alert('Success! Payment received from ' + details.payer.name.given_name + '. We will contact you on Discord: ' + document.getElementById('discordUser').value);
-                        carrinho = [];
-                        atualizarCarrinhoUI();
-                        toggleCart();
+                        alert('Order confirmed! We will contact you on Discord.');
+                        carrinho = []; atualizarCarrinhoUI(); toggleCart();
                     });
-                },
-                onError: function(err) {
-                    alert("Payment error. Please check your Discord username and try again.");
                 }
             }).render('#paypal-button-container');
         }
