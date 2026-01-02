@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pratas Shop | Official Store</title>
+    <title>Pratas Shop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="favicon.jpg" type="image/jpeg">
     <script src="https://www.paypal.com/sdk/js?client-id=Af2JphH-9dx1TEPujfpjDFUSQzIEqOSgm1uAJ7tldWqcX0hSWANU4g2BbT2HTPJN5_Y4t-Q7Czu3fKsl&currency=EUR"></script>
@@ -20,8 +20,7 @@
         
         .container { max-width: 1100px; margin: 40px auto; padding: 20px; text-align: center; }
         
-        /* CATEGORIES */
-        .category-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .category-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 30px; }
         .category-card { position: relative; height: 180px; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid #333; transition: 0.3s; }
         .category-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: 0.3s; }
         .category-card:hover img { opacity: 0.7; transform: scale(1.05); }
@@ -35,11 +34,9 @@
         .item-img { width: 100%; height: 160px; object-fit: cover; border-bottom: 2px solid #ff0844; }
         .item-info { padding: 15px; }
 
-        /* SIDEBAR CART */
         .sidebar-cart { position: fixed; right: -100%; top: 0; width: 320px; height: 100vh; background: #1a1a1a; border-left: 2px solid #ff0844; z-index: 2000; transition: 0.4s; padding: 20px; display: flex; flex-direction: column; }
         .sidebar-cart.active { right: 0; }
         
-        /* MODALS */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #1a1a1a; padding: 30px; border-radius: 15px; max-width: 450px; width: 90%; text-align: center; border: 1px solid #ff0844; }
         .btn-action { background: #ff0844; color: white; padding: 14px; border: none; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; margin-top: 10px; text-transform: uppercase; }
@@ -66,16 +63,20 @@
             <p style="color: #888; margin-top: 10px;">The Best Lifetime Accounts</p>
             <div class="category-menu">
                 <div class="category-card" onclick="openCategory('streaming')">
-                    <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=500">
+                    <img src="https://media.discordapp.net/attachments/1340420983827333241/1456698293819019377/Streaming.jpg?ex=69594f81&is=6957fe01&hm=a55416374dfa9999a36b523289cc27b3495ee3d951ec7b84990ae7ba35962a4d&=&format=webp&width=613&height=613">
                     <h2>streaming</h2>
                 </div>
                 <div class="category-card" onclick="openCategory('games')">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500">
+                    <img src="https://cdn.discordapp.com/attachments/1340420983827333241/1456696848722169896/games.jpg?ex=69594e28&is=6957fca8&hm=c500cd57ac48f48fb15bf2a893d225b5e469fdbd7f285c047c338243177a6827">
                     <h2>Games</h2>
                 </div>
                 <div class="category-card" onclick="openCategory('social')">
-                    <img src="https://images.unsplash.com/photo-1614102073832-030967418971?w=500">
+                    <img src="https://media.discordapp.net/attachments/1340420983827333241/1456697274565394503/social.jpg?ex=69594e8e&is=6957fd0e&hm=fc80b22cab30513b359f5424a9380b96cff1c09767890c9aa6d0b13bab96f626&=&format=webp&width=613&height=613">
                     <h2>Social</h2>
+                </div>
+                <div class="category-card" onclick="openSoftwareModal()">
+                    <img src="https://media.discordapp.net/attachments/1340420983827333241/1456697690912985179/Software.jpg?ex=69594ef1&is=6957fd71&hm=1140fdb0fe0c60e5175182fa688a508d59a45fa6c4037e6182aab17dc2334b02&=&format=webp&width=613&height=613">
+                    <h2>Software</h2>
                 </div>
             </div>
         </div>
@@ -86,6 +87,17 @@
             </div>
             <h2 id="categoryTitle" style="color:#ff0844; text-transform: uppercase; margin-bottom: 20px;"></h2>
             <div id="itemsList" class="items-grid"></div>
+        </div>
+    </div>
+
+    <div id="softwareModal" class="modal">
+        <div class="modal-content">
+            <span style="float:right; cursor:pointer; font-size:24px;" onclick="closeSoftwareModal()">&times;</span>
+            <i class="fas fa-code" style="font-size: 50px; color: #ff0844; margin-bottom: 20px;"></i>
+            <h2>Custom Software</h2>
+            <p style="color:#ccc; margin: 20px 0; font-size: 1.1rem;">If you want to buy a website from me, send a message to Discord:</p>
+            <h2 style="color:#ff0844; background: #000; padding: 10px; border-radius: 5px; display: inline-block;">itspratas</h2>
+            <button class="btn-action" style="margin-top: 25px;" onclick="closeSoftwareModal()">OK</button>
         </div>
     </div>
 
@@ -112,9 +124,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // PRODUCT LIST
-        // ==========================================
         const products = [
             // --- STREAMING ---
             { id: 1, category: 'streaming', name: 'UFC Lifetime FA Account', price: 2.60, desc: '', img: 'https://images.footballfanatics.com/ufc-merchandise/ufc-primary-logo-t-shirt-black-mens_ss5_p-201215183+pv-4+u-r5jj44b6jhglas0xn33f+v-ipjncvn3nlh9gti6nv20.jpg?_hv=2&w=1018' },
@@ -126,7 +135,6 @@
             { id: 7, category: 'streaming', name: 'Spotify Premium Lifetime FA Account', price: 3.00, desc: '', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwDiicpDsawpNveT7Ota2-EC_vZbP8vneTbg&s' },
             { id: 8, category: 'streaming', name: 'NBA Lifetime FA Account', price: 2.90, desc: '', img: 'https://turbologo.com/articles/wp-content/uploads/2019/10/NBA-new-logo.png.webp' },
             { id: 9, category: 'streaming', name: 'YouTube Premium Lifetime FA Account', price: 3.00, desc: '', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRSibuzODLb5lETQ6fI9ebq-FQjWwL-7cBWQ&s' },
-            
             // --- GAMES ---
             { id: 10, category: 'games', name: 'Minecraft FA Account', price: 6.90, desc: '', img: 'https://i.imgur.com/nKsYRdJ.png'},
             { id: 11, category: 'games', name: 'Clash Royale Trophies 1000 - 2500 FA Account', price: 7.50, desc: '💎 1000–2500 trophies: €7,50 ⚔️ 2500–5000 trophies: €9,50 🏆 5000–7000 FA Account: €14,50 🔥 7000–10,000 FA Account: €18,50 🌟 10,000–12,000 FA Account: €24,50', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsCMMZX8mmROPkI7aJKsjh4H7k5vsX-9fYCA&s' },
@@ -138,18 +146,13 @@
             { id: 17, category: 'games', name: 'Rainbow Six Siege Ranked Ready 10-50 Level FA Account', price: 8.00, desc: '🎮 Rainbow Six Siege Ranked Ready 10–50 Level FA Account: €8 🔥 Rainbow Six Siege 100+ Skins / Ranked Ready 100–300 Level FA Account: €28', img: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Rainbow_Six_siege_photo_2014-06-14_17-51.jpg' },
             { id: 18, category: 'games', name: 'Black Ops 6 (0-100 Level) FA Account', price: 16.00, desc: '🎮 Black Ops 6 (0–100 Level) FA Account: €16 ⚡ Black Ops 6 (100–200 Level) + Rare High Level Items FA Account: €24 🔥 Black Ops 7 (Can include Rare & Exclusive Items) FA Account: €24', img: 'https://gameranx.com/wp-content/uploads/2024/07/black-ops-6-how-to-play-the-beta-dates.jpg' },
             { id: 19, category: 'games', name: 'DayZ FA ACCOUNT', price: 6.00, desc: '', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb5567aihB-ftPR2N3k9h72HiybOJlqJF1Qw&s' },
-            
-            
-            
-            
             // --- SOCIAL ---
             { id: 20, category: 'social', name: 'Twitch Fresh Account FA', price: 0.50, desc: '📺 Twitch Fresh Account FA: €0,50 ⚡ Twitch 100+ Real Followers Account FA: €0,90 🔹 Twitch 500+ Real Followers Account FA: €1,50 🔥 Twitch 2000+ Real Followers Account FA: €4 💎 Twitch 5000+ Real Followers Account FA: €9 🌟 Twitch 10,000+ Real Followers Account FA: €18 🏆 Twitch 20,000+ Real Followers Account FA: €27 ✨ Twitch 40,000+ Real Followers Account FA: €45', img: 'https://cdn.m7g.twitch.tv/ba46b4e5e395b11efd34/assets/uploads/generic-email-header-1.jpg?w=1200&h=630&fm=jpg&auto=format' },
             { id: 21, category: 'social', name: 'Discord E-mail Verified (2025) FA Account', price: 0.40, desc: '💻 Discord E-mail Verified (2025) FA Account: €0,40 ⚡ Discord E-mail + Phone Verified (2025) FA Account: €0,70 🔹 Discord E-mail + Phone Verified 3+ Months Aged FA Account: €1 🔥 Discord 2023 Aged FA Account: €1,60 💎 Discord 2020 Aged FA Account: €2,20 🌟 Discord 2019 Aged FA Account: €5 🏆 Discord 2017 Aged FA Account: €9 ✨ Discord 2016 Aged FA Account: €14 🎉 Discord Phone Verified 1 Month Nitro + 2 Boosts FA Account: €2 ⚡ Discord Phone Verified 3 Months Nitro + 2 Boosts FA Account: €7 🔹 14x Server Boosts (1 Month Level 3): €9', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSa4W0-BI5CUx35ovhgfEqbeDo9obGXOMgEtg&s' },
             { id: 22, category: 'social', name: 'ChatGPT Lifetime FA Account', price: 2.00, desc: '', img: 'https://cdn.vectorstock.com/i/500p/13/16/open-ai-logotype-chatgpt-logo-chatbot-chat-vector-46721316.jpg' },
             { id: 23, category: 'social', name: 'CapCut Pro Lifetime FA Account', price: 6.00, desc: '', img: 'https://www.shutterstock.com/image-vector/capcut-logo-editorial-icon-isolated-600nw-2563301725.jpg' },
             { id: 24, category: 'social', name: 'Instagram 1k+ Real Followers FA Account', price: 12.00, desc: '📸 Instagram 1k+ Real Followers FA Account: €12 🌟 Instagram 5k+ Real Followers FA Account: €28', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-LEWI88wVZBQZ4YmnUfwXBQb02j8DbJL--g&s' },
-            { id: 25, category: 'social', name: 'TikTok 1k+ Real Followers FA Account', price: 8.00, desc: '🎵 TikTok 1k+ Real Followers FA Account: €8 🔥 TikTok 10k+ Real Followers FA Account: €25 🏆 TikTok 20k+ Real Followers FA Account: €35', img: 'data:image/png;base64,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' }
-              
+            { id: 25, category: 'social', name: 'TikTok 1k+ Real Followers FA Account', price: 8.00, desc: '🎵 TikTok 1k+ Real Followers FA Account: €8 🔥 TikTok 10k+ Real Followers FA Account: €25 🏆 TikTok 20k+ Real Followers FA Account: €35', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu7mi8b4GZWQWqEYsBV96dKa29BUSUiWE7-A&s' }
         ];
 
         let cart = [];
@@ -159,10 +162,8 @@
             document.getElementById('mainMenu').style.display = 'none';
             document.getElementById('itemsArea').style.display = 'block';
             document.getElementById('categoryTitle').innerText = cat;
-
             const filtered = products.filter(p => p.category === cat);
             const container = document.getElementById('itemsList');
-            
             container.innerHTML = filtered.map(p => `
                 <div class="product-card" onclick="openDetail(${p.id})">
                     <img src="${p.img}" class="item-img">
@@ -183,6 +184,10 @@
             document.getElementById('modalIcon').innerHTML = `<img src="${p.img}" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:15px;">`;
             document.getElementById('modalDetail').style.display = 'flex';
         }
+
+        // Funções para o Popup de Software
+        function openSoftwareModal() { document.getElementById('softwareModal').style.display = 'flex'; }
+        function closeSoftwareModal() { document.getElementById('softwareModal').style.display = 'none'; }
 
         function closeModal() { document.getElementById('modalDetail').style.display = 'none'; }
         function backToMenu() { document.getElementById('mainMenu').style.display = 'block'; document.getElementById('itemsArea').style.display = 'none'; }
@@ -221,12 +226,11 @@
             const container = document.getElementById('paypal-button-container');
             container.innerHTML = '';
             if(cart.length === 0) return;
-
             paypal.Buttons({
                 createOrder: (data, actions) => {
                     const discord = document.getElementById('discordUser').value;
                     if(!discord) {
-                        alert("Please enter your Discord @Username to receive your order!");
+                        alert("Please enter your Discord @Username!");
                         return;
                     }
                     return actions.order.create({
@@ -246,4 +250,3 @@
     </script>
 </body>
 </html>
-
