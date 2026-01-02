@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pratas Shop</title>
-    
+    <title>Pratas Shop - Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-    
     <script src="https://www.paypal.com/sdk/js?client-id=Af2JphH-9dx1TEPujfpjDFUSQzIEqOSgm1uAJ7tldWqcX0hSWANU4g2BbT2HTPJN5_Y4t-Q7Czu3fKsl&currency=EUR"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
@@ -15,7 +13,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #fff; }
         
-        /* Header & Navigation */
+        /* Cabeçalho */
         header { background: #1a1a1a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff0844; position: sticky; top: 0; z-index: 1000; }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: bold; color: #ff0844; cursor: pointer; }
         .logo img { width: 40px; height: 40px; border-radius: 8px; }
@@ -23,21 +21,20 @@
         
         .container { max-width: 1100px; margin: 40px auto; padding: 20px; text-align: center; }
         
-        /* Categorias */
+        /* Categorias e Itens */
         .menu-categorias { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
         .card-categoria { position: relative; height: 180px; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid #333; }
         .card-categoria img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: 0.3s; }
         .card-categoria:hover img { opacity: 0.7; transform: scale(1.05); }
         .card-categoria h2 { position: absolute; bottom: 15px; left: 15px; font-size: 22px; }
 
-        /* Lista de Itens */
         #areaItens { display: none; }
         .lista-subitens { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
         .item-clicavel { background: #1a1a1a; border-radius: 10px; overflow: hidden; cursor: pointer; border: 1px solid #333; text-align: left; }
         .item-img { width: 100%; height: 140px; object-fit: cover; border-bottom: 2px solid #ff0844; }
         .item-info { padding: 12px; }
 
-        /* Admin Panel */
+        /* Painel Admin */
         #adminPanel { display: none; background: #111; padding: 30px; border-radius: 15px; border: 2px solid #ff0844; margin: 20px auto; max-width: 700px; text-align: left; }
         .admin-input { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; }
         .btn-admin-save { background: #ff0844; color: white; padding: 14px; border: none; width: 100%; cursor: pointer; font-weight: bold; border-radius: 8px; margin-top: 10px; }
@@ -47,7 +44,7 @@
         .btn-edit { background: #ffb347; color: #000; padding: 5px 10px; border-radius: 4px; border: none; font-weight: bold; cursor: pointer; }
         .btn-del { background: #ff0844; color: #fff; padding: 5px 10px; border-radius: 4px; border: none; font-weight: bold; cursor: pointer; }
 
-        /* NOVO DESIGN DO MODAL DE CROP */
+        /* MODAL DE RECORTE (CROP) */
         #modalCrop { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.95); z-index: 3000; justify-content: center; align-items: center; 
@@ -64,7 +61,7 @@
         }
         .btn-tool:hover { background: #ff0844; transform: scale(1.1); }
 
-        /* Sidebar & Modals */
+        /* Carrinho e Modais Extras */
         .sidebar-cart { position: fixed; right: -100%; top: 0; width: 320px; height: 100vh; background: #1a1a1a; border-left: 2px solid #ff0844; z-index: 2000; transition: 0.4s; padding: 20px; display: flex; flex-direction: column; }
         .sidebar-cart.active { right: 0; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
@@ -81,7 +78,7 @@
             <img src="favicon.jpg" alt="Logo">
             <span>Pratas Shop</span>
         </div>
-        <button class="cart-btn" onclick="toggleCart()">Cart (<span id="cart-count">0</span>)</button>
+        <button class="cart-btn" onclick="toggleCart()">Carrinho (<span id="cart-count">0</span>)</button>
     </header>
 
     <div class="container">
@@ -89,36 +86,36 @@
             <h1>PRATAS <span style="color:#ff0844">SHOP</span></h1>
             <div class="menu-categorias">
                 <div class="card-categoria" onclick="abrirCategoria('streaming')">
-                    <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=500">
+                    <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=500" alt="Streaming">
                     <h2>STREAMING</h2>
                 </div>
                 <div class="card-categoria" onclick="abrirCategoria('games')">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500">
+                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" alt="Games">
                     <h2>GAMES</h2>
                 </div>
                 <div class="card-categoria" onclick="abrirCategoria('social')">
-                    <img src="https://images.unsplash.com/photo-1614102073832-030967418971?w=500">
+                    <img src="https://images.unsplash.com/photo-1614102073832-030967418971?w=500" alt="Social">
                     <h2>SOCIAL</h2>
                 </div>
             </div>
         </div>
 
         <div id="areaItens" class="animar">
-            <button onclick="voltarAoMenu()" style="background:transparent; color:#ff0844; border:1px solid #ff0844; padding:8px 15px; border-radius:5px; cursor:pointer; margin-bottom:20px;">← Back</button>
+            <button onclick="voltarAoMenu()" style="background:transparent; color:#ff0844; border:1px solid #ff0844; padding:8px 15px; border-radius:5px; cursor:pointer; margin-bottom:20px;">← Voltar</button>
             <h2 id="tituloCategoria" style="color:#ff0844; text-transform: uppercase;"></h2>
             <div id="listaItens" class="lista-subitens"></div>
         </div>
 
         <div id="adminPanel" class="animar">
             <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h2 id="adminTitle" style="color:#ff0844;">Manage Product</h2>
+                <h2 id="adminTitle" style="color:#ff0844;">Gerir Produto</h2>
                 <button onclick="fecharAdmin()" style="background:transparent; color:#ff0844; border:none; font-size:24px; cursor:pointer;">&times;</button>
             </div>
             
             <input type="hidden" id="editId">
-            <input type="text" id="admNome" class="admin-input" placeholder="Product Name">
-            <input type="text" id="admDesc" class="admin-input" placeholder="Description">
-            <input type="number" id="admPreco" class="admin-input" placeholder="Price (€)" step="0.01">
+            <input type="text" id="admNome" class="admin-input" placeholder="Nome do Produto">
+            <input type="text" id="admDesc" class="admin-input" placeholder="Descrição">
+            <input type="number" id="admPreco" class="admin-input" placeholder="Preço (€)" step="0.01">
             <select id="admCat" class="admin-input">
                 <option value="streaming">Streaming</option>
                 <option value="games">Games</option>
@@ -127,14 +124,14 @@
             
             <div style="border: 1px dashed #444; padding: 20px; text-align: center; border-radius: 10px; margin: 15px 0;">
                 <input type="file" id="admImgFile" hidden accept="image/*" onchange="iniciarCrop(this.files[0])">
-                <button onclick="document.getElementById('admImgFile').click()" style="background:#ff0844; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold;">Choose & Crop Image</button>
+                <button onclick="document.getElementById('admImgFile').click()" style="background:#ff0844; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-weight:bold;">Escolher e Recortar Imagem</button>
                 
                 <div id="mini-preview" style="display:none; margin-top:15px;">
                     <img id="imgPre" style="width:100px; height:100px; object-fit:cover; border:2px solid #ff0844; border-radius:8px;">
                 </div>
             </div>
             
-            <button class="btn-admin-save" id="btnSalvar" onclick="salvarProduto()">SAVE PRODUCT</button>
+            <button class="btn-admin-save" id="btnSalvar" onclick="salvarProduto()">GUARDAR PRODUTO</button>
             <div class="gestao-lista" id="listaGestao"></div>
         </div>
     </div>
@@ -147,27 +144,27 @@
             </div>
             
             <div class="crop-controls">
-                <button class="btn-tool" onclick="cropper.rotate(-90)" title="Girar Esquerda"><i class="fas fa-undo"></i></button>
+                <button class="btn-tool" onclick="cropper.rotate(-90)" title="Rodar Esquerda"><i class="fas fa-undo"></i></button>
                 <button class="btn-tool" onclick="cropper.zoom(0.1)" title="Zoom In"><i class="fas fa-search-plus"></i></button>
                 <button class="btn-tool" onclick="cropper.zoom(-0.1)" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
-                <button class="btn-tool" onclick="cropper.rotate(90)" title="Girar Direita"><i class="fas fa-redo"></i></button>
+                <button class="btn-tool" onclick="cropper.rotate(90)" title="Rodar Direita"><i class="fas fa-redo"></i></button>
             </div>
 
             <div style="display:flex; gap: 10px;">
-                <button onclick="confirmarCrop()" style="flex:2; background:#ff0844; color:white; border:none; padding:15px; border-radius:8px; font-weight:bold; cursor:pointer;">APPLY CROP</button>
-                <button onclick="cancelarCrop()" style="flex:1; background:#333; color:white; border:none; padding:15px; border-radius:8px; cursor:pointer;">CANCEL</button>
+                <button onclick="confirmarCrop()" style="flex:2; background:#ff0844; color:white; border:none; padding:15px; border-radius:8px; font-weight:bold; cursor:pointer;">APLICAR RECORTE</button>
+                <button onclick="cancelarCrop()" style="flex:1; background:#333; color:white; border:none; padding:15px; border-radius:8px; cursor:pointer;">CANCELAR</button>
             </div>
         </div>
     </div>
 
     <div id="sidebarCart" class="sidebar-cart">
-        <h2 style="color:#ff0844; margin-bottom:20px;">Cart</h2>
+        <h2 style="color:#ff0844; margin-bottom:20px;">Carrinho</h2>
         <div id="cart-items" style="flex-grow:1; overflow-y:auto;"></div>
         <div style="padding-top:15px; border-top:1px solid #333;">
             <p style="font-size:18px; margin-bottom:15px;">Total: <span id="cart-total" style="color:#ff0844; font-weight:bold;">€0.00</span></p>
-            <input type="text" id="discordUser" placeholder="Discord @User" style="width:100%; padding:10px; background:#000; border:1px solid #333; color:white; margin-bottom:15px;">
+            <input type="text" id="discordUser" placeholder="Seu Discord @User" style="width:100%; padding:10px; background:#000; border:1px solid #333; color:white; margin-bottom:15px;">
             <div id="paypal-button-container"></div>
-            <button onclick="toggleCart()" style="width:100%; background:transparent; border:none; color:#666; margin-top:10px; cursor:pointer;">Close</button>
+            <button onclick="toggleCart()" style="width:100%; background:transparent; border:none; color:#666; margin-top:10px; cursor:pointer;">Fechar</button>
         </div>
     </div>
 
@@ -178,7 +175,7 @@
             <h2 id="modalNome" style="margin-top:10px;"></h2>
             <p id="modalDesc" style="color:#888; margin:10px 0;"></p>
             <h1 id="modalPreco" style="color:#ff0844;"></h1>
-            <button class="btn-admin-save" onclick="adicionarAoCarrinho()">ADD TO CART</button>
+            <button class="btn-admin-save" onclick="adicionarAoCarrinho()">ADICIONAR AO CARRINHO</button>
         </div>
     </div>
 
@@ -195,7 +192,7 @@
             seq += e.key.toUpperCase();
             if (seq.includes("DAS")) {
                 seq = "";
-                if(prompt("Admin Password:") === "AdminPratasShop") {
+                if(prompt("Password Admin:") === "AdminPratasShop") {
                     document.getElementById('adminPanel').style.display = 'block';
                     atualizarListaGestao();
                 }
@@ -204,7 +201,7 @@
 
         function fecharAdmin() { document.getElementById('adminPanel').style.display = 'none'; resetForm(); }
 
-        // --- LÓGICA DE RECORTE (CROP) PROFISSIONAL ---
+        // --- LÓGICA DE RECORTE (CROP) ---
         function iniciarCrop(file) {
             if (!file) return;
             const reader = new FileReader();
@@ -215,9 +212,9 @@
                 
                 if (cropper) cropper.destroy();
                 cropper = new Cropper(imgElement, {
-                    aspectRatio: 1, // Quadrado
-                    viewMode: 2,    // Contém a imagem dentro do container
-                    dragMode: 'move', // Permite arrastar a imagem
+                    aspectRatio: 1, 
+                    viewMode: 2,    
+                    dragMode: 'move', 
                     autoCropArea: 1,
                     imageSmoothingQuality: 'high'
                 });
@@ -251,7 +248,7 @@
             const desc = document.getElementById('admDesc').value;
             const cat = document.getElementById('admCat').value;
 
-            if(!nome || !preco || !imagemFinal) return alert("Fill Name, Price and Image!");
+            if(!nome || !preco || !imagemFinal) return alert("Preencha Nome, Preço e Imagem!");
 
             if(id) {
                 const index = produtos.findIndex(p => p.id == id);
@@ -261,7 +258,7 @@
             }
 
             localStorage.setItem('pratas_stock', JSON.stringify(produtos));
-            alert("Product saved!");
+            alert("Produto guardado!");
             resetForm();
             atualizarListaGestao();
         }
@@ -276,11 +273,11 @@
             imagemFinal = p.img;
             document.getElementById('imgPre').src = p.img;
             document.getElementById('mini-preview').style.display = 'block';
-            document.getElementById('btnSalvar').innerText = "UPDATE PRODUCT";
+            document.getElementById('btnSalvar').innerText = "ATUALIZAR PRODUTO";
         }
 
         function apagarProduto(id) {
-            if(confirm("Delete?")) {
+            if(confirm("Eliminar este produto?")) {
                 produtos = produtos.filter(p => p.id != id);
                 localStorage.setItem('pratas_stock', JSON.stringify(produtos));
                 atualizarListaGestao();
@@ -293,7 +290,7 @@
                 <div class="gestao-item">
                     <span>${p.nome}</span>
                     <div>
-                        <button class="btn-edit" onclick="editarProduto(${p.id})">Edit</button>
+                        <button class="btn-edit" onclick="editarProduto(${p.id})">Editar</button>
                         <button class="btn-del" onclick="apagarProduto(${p.id})">X</button>
                     </div>
                 </div>
@@ -306,7 +303,7 @@
             document.getElementById('admPreco').value = "";
             document.getElementById('admDesc').value = "";
             document.getElementById('mini-preview').style.display = 'none';
-            document.getElementById('btnSalvar').innerText = "SAVE PRODUCT";
+            document.getElementById('btnSalvar').innerText = "GUARDAR PRODUTO";
             imagemFinal = null;
         }
 
@@ -320,7 +317,7 @@
                 <div class="item-clicavel" onclick="abrirDetalhe(${p.id})">
                     <img src="${p.img}" class="item-img">
                     <div class="item-info"><h3>${p.nome}</h3><span>€${p.preco.toFixed(2)}</span></div>
-                </div>`).join('') || "<p>Empty.</p>";
+                </div>`).join('') || "<p>Nenhum item nesta categoria.</p>";
         }
 
         function voltarAoMenu() { document.getElementById('menuPrincipal').style.display = 'block'; document.getElementById('areaItens').style.display = 'none'; }
@@ -337,7 +334,10 @@
 
         function fecharModal() { document.getElementById('modalDetalhe').style.display = 'none'; }
 
-        function toggleCart() { document.getElementById('sidebarCart').classList.toggle('active'); if(document.getElementById('sidebarCart').classList.contains('active')) renderPaypal(); }
+        function toggleCart() { 
+            document.getElementById('sidebarCart').classList.toggle('active'); 
+            if(document.getElementById('sidebarCart').classList.contains('active')) renderPaypal(); 
+        }
 
         function adicionarAoCarrinho() { carrinho.push(produtoAtual); atualizarCarrinhoUI(); fecharModal(); toggleCart(); }
 
@@ -346,12 +346,22 @@
             document.getElementById('cart-count').innerText = carrinho.length;
             document.getElementById('cart-items').innerHTML = carrinho.map((i, idx) => {
                 total += i.preco;
-                return `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                return `<div style="display:flex; justify-content:space-between; margin-bottom:10px; align-items:center;">
                     <span>${i.nome}</span>
-                    <span style="color:#ff0844;">€${i.preco.toFixed(2)}</span>
+                    <div>
+                        <span style="color:#ff0844; margin-right:10px;">€${i.preco.toFixed(2)}</span>
+                        <button onclick="removerDoCarrinho(${idx})" style="background:none; border:none; color:grey; cursor:pointer;">&times;</button>
+                    </div>
                 </div>`;
             }).join('');
             document.getElementById('cart-total').innerText = `€${total.toFixed(2)}`;
+        }
+
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinhoUI();
+            if(carrinho.length === 0) document.getElementById('paypal-button-container').innerHTML = '';
+            else renderPaypal();
         }
 
         function renderPaypal() {
@@ -359,10 +369,15 @@
             if(carrinho.length === 0) return;
             paypal.Buttons({
                 createOrder: (data, actions) => {
-                    if(!document.getElementById('discordUser').value) return alert("Enter Discord!");
+                    if(!document.getElementById('discordUser').value) return alert("Insira o seu Discord para entrega!");
                     return actions.order.create({ purchase_units: [{ amount: { value: document.getElementById('cart-total').innerText.replace('€','') } }] });
                 },
-                onApprove: (data, actions) => actions.order.capture().then(() => { alert("Done!"); carrinho = []; atualizarCarrinhoUI(); toggleCart(); })
+                onApprove: (data, actions) => actions.order.capture().then(() => { 
+                    alert("Compra efetuada com sucesso!"); 
+                    carrinho = []; 
+                    atualizarCarrinhoUI(); 
+                    toggleCart(); 
+                })
             }).render('#paypal-button-container');
         }
     </script>
